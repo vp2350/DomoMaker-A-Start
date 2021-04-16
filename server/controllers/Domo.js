@@ -1,6 +1,8 @@
 const models = require('../models');
 
-const { Domo } = models;
+const {
+  Domo,
+} = models;
 
 const makerPage = (req, res) => {
   Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
@@ -19,15 +21,16 @@ const makerPage = (req, res) => {
 };
 
 const makeDomo = (req, res) => {
-  if (!req.body.name || !req.body.age) {
+  if (!req.body.name || !req.body.age || !req.body.height) {
     return res.status(400).json({
-      error: 'Both name and age are required!',
+      error: 'Name, age and height are required!',
     });
   }
 
   const domoData = {
     name: req.body.name,
     age: req.body.age,
+    height: req.body.height,
     owner: req.session.account._id,
   };
 
@@ -60,15 +63,46 @@ const getDomos = (request, response) => {
   const res = response;
 
   return Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
+    console.dir(req.session.account._id);
     if (err) {
       console.log(err);
-      return res.status(400).json({ error: 'An error occurred' });
+      return res.status(400).json({
+        error: 'An error occurred',
+      });
     }
     console.log(docs);
-    return res.json({ domos: docs });
+    return res.json({
+      domos: docs,
+    });
   });
 };
 
+
+const getDomosByName = (request, response) => {
+  const req = request;
+  const res = response;
+  console.dir(req.body.userName);
+  if (!req.body.userName) {
+    console.dir(req.body);
+    return res.status(400).json({
+      error: 'Name, age and height are required!',
+    });
+  }
+  return Domo.DomoModel.findByOwner(req.body.userName, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({
+        error: 'An error occurred',
+      });
+    }
+    console.log(docs);
+    return res.json({
+      domos: docs,
+    });
+  });
+};
+
+module.exports.getDomosByName = getDomosByName;
 module.exports.getDomos = getDomos;
 module.exports.makerPage = makerPage;
 module.exports.make = makeDomo;
