@@ -21,7 +21,8 @@ const makerPage = (req, res) => {
 };
 
 const makeDomo = (req, res) => {
-  if (!req.body.name || !req.body.age || !req.body.height) {
+  if (!req.body.name || !req.body.age || !req.body.height || !req.body.file) {
+    console.dir(req);
     return res.status(400).json({
       error: 'Name, age and height are required!',
     });
@@ -31,6 +32,7 @@ const makeDomo = (req, res) => {
     name: req.body.name,
     age: req.body.age,
     height: req.body.height,
+    file: req.body.file,
     owner: req.session.account._id,
   };
 

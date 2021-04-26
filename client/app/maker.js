@@ -3,12 +3,23 @@ const handleDomo = (e) => {
     
     $("#domoMessage").animate({width: 'hide'}, 350);
     
-    if($("#domoName").val() == '' || $("#domoAge").val() == '' || $("#domoHeight").val() == '') {
+    if($("#domoName").val() == '' || $("#domoAge").val() == '' || $("#domoHeight").val() == '' || $("#domoFile").val() == '') {
         handleError("All fields are required!");
         return false;
     }
     
-    sendAjax('POST', $("#domoForm").attr("action"), $("#domoForm").serialize(), function() {
+    var inputForm = {};
+    inputForm["name"] = $("#domoName").val();
+    inputForm["age"] = $("#domoAge").val();
+    inputForm["height"] = $("#domoHeight").val();
+    inputForm["_csrf"] = $("#csrfDomo").val();
+    inputForm["file"] = $("#domoFile").files;
+    console.log($("#domoForm").serialize());
+    console.log($("#csrfDomo").val());
+    console.log(inputForm["file"]);
+    //var inputString = 
+    
+    sendAjax('POST', $("#domoForm").attr("action"), inputForm, function() {
         loadDomosFromServer();
     });
     
@@ -37,6 +48,7 @@ const DomoForm = (props) => {
     <form id="domoForm"
         onSubmit={handleDomo}
         name="domoForm"
+        encType="multipart/form-data"
         action="/maker"
         method="POST"
         className="domoForm"
@@ -47,7 +59,9 @@ const DomoForm = (props) => {
         <input id="domoAge" type="text" name="age" placeholder="Domo Age" />
         <label htmlFor="height">Height: </label>
         <input id="domoHeight" type="text" name="height" placeholder="Domo Height" />
-        <input type="hidden" name="_csrf" value={props.csrf} />
+        <label htmlFor="file">File: </label>
+        <input id="domoFile" type="file" name="file" placeholder="Domo File" />
+        <input id="csrfDomo" type="hidden" name="_csrf" value={props.csrf} />
         <input className="makeDomoSubmit" type="submit" value="Make Domo" />
     </form>
     );
@@ -86,7 +100,8 @@ const DomoList = function(props) {
                 <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
                 <h3 className="domoName">Name: {domo.name} </h3>
                 <h3 className="domoAge">Age: {domo.age} </h3>  
-                <h3 className="domoHeight">Height: {domo.height} </h3>                
+                <h3 className="domoHeight">Height: {domo.height} </h3>
+                <h3 className="domoHeight">File: {domo.file} </h3> 
             </div>
         );
     });

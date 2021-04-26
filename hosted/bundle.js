@@ -6,12 +6,22 @@ var handleDomo = function handleDomo(e) {
     width: 'hide'
   }, 350);
 
-  if ($("#domoName").val() == '' || $("#domoAge").val() == '' || $("#domoHeight").val() == '') {
+  if ($("#domoName").val() == '' || $("#domoAge").val() == '' || $("#domoHeight").val() == '' || $("#domoFile").val() == '') {
     handleError("All fields are required!");
     return false;
   }
 
-  sendAjax('POST', $("#domoForm").attr("action"), $("#domoForm").serialize(), function () {
+  var inputForm = {};
+  inputForm["name"] = $("#domoName").val();
+  inputForm["age"] = $("#domoAge").val();
+  inputForm["height"] = $("#domoHeight").val();
+  inputForm["_csrf"] = $("#csrfDomo").val();
+  inputForm["file"] = $("#domoFile").files;
+  console.log($("#domoForm").serialize());
+  console.log($("#csrfDomo").val());
+  console.log(inputForm["file"]); //var inputString = 
+
+  sendAjax('POST', $("#domoForm").attr("action"), inputForm, function () {
     loadDomosFromServer();
   });
   return false;
@@ -37,6 +47,7 @@ var DomoForm = function DomoForm(props) {
       id: "domoForm",
       onSubmit: handleDomo,
       name: "domoForm",
+      encType: "multipart/form-data",
       action: "/maker",
       method: "POST",
       className: "domoForm"
@@ -61,7 +72,15 @@ var DomoForm = function DomoForm(props) {
       type: "text",
       name: "height",
       placeholder: "Domo Height"
+    }), /*#__PURE__*/React.createElement("label", {
+      htmlFor: "file"
+    }, "File: "), /*#__PURE__*/React.createElement("input", {
+      id: "domoFile",
+      type: "file",
+      name: "file",
+      placeholder: "Domo File"
     }), /*#__PURE__*/React.createElement("input", {
+      id: "csrfDomo",
       type: "hidden",
       name: "_csrf",
       value: props.csrf
@@ -124,7 +143,9 @@ var DomoList = function DomoList(props) {
         className: "domoAge"
       }, "Age: ", domo.age, " "), /*#__PURE__*/React.createElement("h3", {
         className: "domoHeight"
-      }, "Height: ", domo.height, " "))
+      }, "Height: ", domo.height, " "), /*#__PURE__*/React.createElement("h3", {
+        className: "domoHeight"
+      }, "File: ", domo.file, " "))
     );
   });
   return (/*#__PURE__*/React.createElement("div", {

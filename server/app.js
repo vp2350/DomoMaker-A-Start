@@ -11,7 +11,7 @@ const RedisStore = require('connect-redis')(session);
 const url = require('url');
 const csrf = require('csurf');
 const redis = require('redis');
-
+const fileUpload = require('express-fileupload');
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/DomoMaker';
@@ -54,6 +54,7 @@ app.use('/assets', express.static(path.resolve(`${__dirname}/../hosted/`)));
 app.use(favicon(`${__dirname}/../hosted/img/favicon.png`));
 app.disable('x-powered-by');
 app.use(compression());
+app.use(fileUpload());
 app.use(bodyParser.urlencoded({
   extended: true,
 }));
@@ -76,13 +77,13 @@ app.set('view engine', 'handlebars');
 app.use(cookieParser());
 app.set('views', `${__dirname}/../views`);
 
-app.use(csrf());
-app.use((err, req, res, next) => {
-  if (err.code !== 'EBADCSRFTOKEN') return next(err);
-
-  console.log('MISSING CSRF token');
-  return false;
-});
+//app.use(csrf());
+//app.use((err, req, res, next) => {
+//  if (err.code !== 'EBADCSRFTOKEN') return next(err);
+//
+//  console.log('MISSING CSRF token');
+//  return false;
+//});
 
 router(app);
 
