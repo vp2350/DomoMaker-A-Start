@@ -9,9 +9,10 @@ const expressHandlebars = require('express-handlebars');
 const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 const url = require('url');
-const csrf = require('csurf');
+// const csrf = require('csurf');
 const redis = require('redis');
 const fileUpload = require('express-fileupload');
+
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/DomoMaker';
@@ -77,13 +78,13 @@ app.set('view engine', 'handlebars');
 app.use(cookieParser());
 app.set('views', `${__dirname}/../views`);
 
-//app.use(csrf());
-//app.use((err, req, res, next) => {
+// app.use(csrf());
+// app.use((err, req, res, next) => {
 //  if (err.code !== 'EBADCSRFTOKEN') return next(err);
 //
 //  console.log('MISSING CSRF token');
 //  return false;
-//});
+// });
 
 router(app);
 
