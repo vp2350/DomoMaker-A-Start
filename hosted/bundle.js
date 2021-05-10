@@ -5,10 +5,11 @@ var FileForm = function FileForm(props) {
       id: "uploadForm",
       action: "/upload",
       method: "post",
-      encType: "multipart/form-data"
+      encType: "multipart/form-data",
+      className: "uploadForm"
     }, /*#__PURE__*/React.createElement("label", {
       htmlFor: "userName"
-    }, "Uploade As(uses current username if empty): "), /*#__PURE__*/React.createElement("input", {
+    }, "Upload As: "), /*#__PURE__*/React.createElement("input", {
       id: "userName",
       type: "text",
       name: "userName",
@@ -20,7 +21,9 @@ var FileForm = function FileForm(props) {
       type: "text",
       name: "fileInfo",
       placeholder: "File Description"
-    }), /*#__PURE__*/React.createElement("input", {
+    }), /*#__PURE__*/React.createElement("label", {
+      htmlFor: "sampleFile"
+    }, "Upload File: "), /*#__PURE__*/React.createElement("input", {
       type: "file",
       name: "sampleFile"
     }), /*#__PURE__*/React.createElement("input", {
@@ -30,7 +33,8 @@ var FileForm = function FileForm(props) {
       value: props.csrf
     }), /*#__PURE__*/React.createElement("input", {
       type: "submit",
-      value: "Upload!"
+      value: "Upload!",
+      className: "formSubmit"
     }))
   );
 };
@@ -39,10 +43,12 @@ var DownloadForm = function DownloadForm(props) {
   return (/*#__PURE__*/React.createElement("form", {
       id: "retrieveForm",
       action: "/retrieve",
-      method: "get"
+      method: "get",
+      className: "retrieveForm"
     }, /*#__PURE__*/React.createElement("label", {
       htmlFor: "fileName"
     }, "Retrieve File By Name: "), /*#__PURE__*/React.createElement("input", {
+      id: "fileName",
       name: "fileName",
       type: "text"
     }), /*#__PURE__*/React.createElement("input", {
@@ -52,7 +58,8 @@ var DownloadForm = function DownloadForm(props) {
       value: props.csrf
     }), /*#__PURE__*/React.createElement("input", {
       type: "submit",
-      value: "Download!"
+      value: "Download!",
+      className: "formSubmitRetrieve"
     }))
   );
 };
@@ -67,7 +74,7 @@ var FileInfo = function FileInfo(props) {
 
   return (/*#__PURE__*/React.createElement("div", {
       className: "fileInfo"
-    }, /*#__PURE__*/React.createElement("h2", null, props.uploaderName), /*#__PURE__*/React.createElement("h2", null, props.fileName), /*#__PURE__*/React.createElement("h3", null, props.info))
+    }, /*#__PURE__*/React.createElement("h2", null, "Uploader: ", props.uploaderName), /*#__PURE__*/React.createElement("h2", null, "File Name: ", props.fileName), /*#__PURE__*/React.createElement("h3", null, props.info))
   );
 };
 
@@ -75,7 +82,7 @@ var FileList = function FileList(props) {
   if (props.files.length === 0) {
     return (/*#__PURE__*/React.createElement("div", {
         className: "fileList"
-      }, /*#__PURE__*/React.createElement("h1", null, "MY FILES: (Click on each for more info)"), /*#__PURE__*/React.createElement("h3", {
+      }, /*#__PURE__*/React.createElement("h1", null, "MY FILES: (Click on each for more info) (Only files uploaded with this username will show here)"), /*#__PURE__*/React.createElement("h3", {
         className: "emptyFile"
       }, "No Files yet"))
     );
@@ -113,6 +120,7 @@ var FileList = function FileList(props) {
       }, "Uploader: ", file.uploaderName, " "), /*#__PURE__*/React.createElement("h3", {
         className: "fileType"
       }, "Type: ", file.mimetype, " "), /*#__PURE__*/React.createElement("button", {
+        className: "downloadButton",
         onClick: function onClick() {
           return downloadFile(file.name);
         }
@@ -121,7 +129,7 @@ var FileList = function FileList(props) {
   });
   return (/*#__PURE__*/React.createElement("div", {
       className: "fileList"
-    }, /*#__PURE__*/React.createElement("h1", null, "MY FILES"), fileNodes)
+    }, /*#__PURE__*/React.createElement("h1", null, "MY FILES: (Click on each for more info) (Only files uploaded with this username will show here)"), fileNodes)
   );
 };
 

@@ -105,6 +105,7 @@ var DownloadForm = function DownloadForm(props) {
     }, /*#__PURE__*/React.createElement("label", {
       htmlFor: "fileName"
     }, "Retrieve File By Name: "), /*#__PURE__*/React.createElement("input", {
+      id: "retrieveFile",
       name: "fileName",
       type: "text"
     }), /*#__PURE__*/React.createElement("input", {
@@ -113,6 +114,7 @@ var DownloadForm = function DownloadForm(props) {
       name: "_csrf",
       value: props.csrf
     }), /*#__PURE__*/React.createElement("input", {
+      className: "retrieveSubmit",
       type: "submit",
       value: "Download!"
     }))
@@ -129,7 +131,7 @@ var FileInfo = function FileInfo(props) {
 
   return (/*#__PURE__*/React.createElement("div", {
       className: "fileInfo"
-    }, /*#__PURE__*/React.createElement("h2", null, props.uploaderName), /*#__PURE__*/React.createElement("h2", null, props.fileName), /*#__PURE__*/React.createElement("h3", null, props.info))
+    }, /*#__PURE__*/React.createElement("h2", null, "Uploader: ", props.uploaderName), /*#__PURE__*/React.createElement("h2", null, "File Name: ", props.fileName), /*#__PURE__*/React.createElement("h3", null, props.info))
   );
 };
 
@@ -171,7 +173,7 @@ var FileList = function FileList(props) {
   });
   return (/*#__PURE__*/React.createElement("div", {
       className: "fileList"
-    }, /*#__PURE__*/React.createElement("h1", null, "MY FILES"), fileNodes)
+    }, /*#__PURE__*/React.createElement("h1", null, "FILES RECEIVED: (Click on each for more info)"), fileNodes)
   );
 };
 

@@ -5,14 +5,16 @@ const FileForm = (props) =>{
         action='/upload'
         method='post'
         encType="multipart/form-data"
+        className = "uploadForm"
     >
-        <label htmlFor="userName">Uploade As(uses current username if empty): </label>
+        <label htmlFor="userName">Upload As: </label>
         <input id="userName" type="text" name="userName" placeholder="User Name" />
         <label htmlFor="fileInfo">File Description: </label>
         <input id="fileInfo" type="text" name="fileInfo" placeholder="File Description" />
+        <label htmlFor="sampleFile">Upload File: </label>
         <input type="file" name="sampleFile" />
         <input id="csrfFile" type="hidden" name="_csrf" value={props.csrf} />
-        <input type="submit" value='Upload!' />    
+        <input type="submit" value='Upload!' className = "formSubmit"/>    
     </form>
         );
 };
@@ -21,11 +23,12 @@ const DownloadForm = (props) => {
     return (<form 
         id='retrieveForm'
         action='/retrieve'
-        method='get'>
+        method='get'
+        className='retrieveForm'>
         <label htmlFor='fileName'>Retrieve File By Name: </label>
-        <input name='fileName' type='text' />
+        <input id="fileName" name='fileName' type='text' />
         <input id="csrfFile" type="hidden" name="_csrf" value={props.csrf} />
-        <input type='submit' value='Download!' />        
+        <input type='submit' value='Download!' className = "formSubmitRetrieve"/>        
     </form>);
 };
 
@@ -40,8 +43,8 @@ const FileInfo = function(props){
     
     return (
         <div className = "fileInfo">
-            <h2>{props.uploaderName}</h2>
-            <h2>{props.fileName}</h2>
+            <h2>Uploader: {props.uploaderName}</h2>
+            <h2>File Name: {props.fileName}</h2>
             <h3>{props.info}</h3>
         </div>
     );
@@ -51,7 +54,7 @@ const FileList = function(props) {
     if(props.files.length === 0) {
         return (
             <div className="fileList">
-                   <h1>MY FILES: (Click on each for more info)</h1>
+                   <h1>MY FILES: (Click on each for more info) (Only files uploaded with this username will show here)</h1>
                    <h3 className="emptyFile">No Files yet</h3>
             </div>
         );
@@ -76,7 +79,7 @@ const FileList = function(props) {
                 <h3 className="fileSize">Size: {file.size} bits </h3>  
                 <h3 className="fileUploader">Uploader: {file.uploaderName} </h3>
                 <h3 className="fileType">Type: {file.mimetype} </h3> 
-                <button onClick = {() => downloadFile(file.name)}>Download</button>
+                <button className = "downloadButton" onClick = {() => downloadFile(file.name)}>Download</button>
                 <h4>Could not get the download button to work, use retrieve file</h4>>
             </div>
         );
@@ -84,7 +87,7 @@ const FileList = function(props) {
     
     return (
         <div className="fileList">
-           <h1>MY FILES</h1>
+           <h1>MY FILES: (Click on each for more info) (Only files uploaded with this username will show here)</h1>
             {fileNodes}
         </div>
     );

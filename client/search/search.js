@@ -77,9 +77,9 @@ const DownloadForm = (props) => {
         action='/retrieve'
         method='get'>
         <label htmlFor='fileName'>Retrieve File By Name: </label>
-        <input name='fileName' type='text' />
+        <input id='retrieveFile' name='fileName' type='text' />
         <input id="csrfFile" type="hidden" name="_csrf" value={props.csrf} />
-        <input type='submit' value='Download!' />        
+        <input className = "retrieveSubmit" type='submit' value='Download!' />        
     </form>);
 };
 
@@ -94,8 +94,8 @@ const FileInfo = function(props){
     
     return (
         <div className = "fileInfo">
-            <h2>{props.uploaderName}</h2>
-            <h2>{props.fileName}</h2>
+            <h2>Uploader: {props.uploaderName}</h2>
+            <h2>File Name: {props.fileName}</h2>
             <h3>{props.info}</h3>
         </div>
     );
@@ -129,7 +129,7 @@ const FileList = function(props) {
     
     return (
         <div className="fileList">
-           <h1>MY FILES</h1>
+           <h1>FILES RECEIVED: (Click on each for more info)</h1>
             {fileNodes}
         </div>
     );

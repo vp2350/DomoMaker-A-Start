@@ -76,8 +76,8 @@ const retrieveFile = (req, res) => {
     }
 
     if (!doc) {
-      return res.staus(404).json({
-        error: 'File not found',
+      return res.status(404).json({
+        error: 'No files were found',
       });
     }
 

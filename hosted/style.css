@@ -4,11 +4,12 @@ html, body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+    background-color: #f7e4d2;
 }
 
 #logo {
-    height: 40px;
-    width: 40;
+    height: 60px;
+    width: 60;
     padding-top: 5px;
     float:left;
     border-radius: 8px;
@@ -16,8 +17,8 @@ html, body {
 
 nav {
     width: 100%;
-    height: 50px;
-    background-color: #55acee;
+    height: 60px;
+    background-color: #2F5061;
 }
 
 nav:nth-child(1) {
@@ -29,27 +30,27 @@ nav:nth-child(1) {
     padding-top: 12px;
     padding-left: 20px;
     color: white;
-    font-size: 1.3em;
+    font-size: 2.3em;
     float: left;
 }
 
 .navlink a, .navlink a:link, .navlink a:visited, .navlink a:hover, .navlink a:active {
-    color: white;
+    color: #E57F84;
     text-decoration: none;
     padding: 5px;
     border-radius: 4px;
-    background-color: #55acee;
+    background-color: #4297A0;
     transition: background-color 0.4s ease;
 }
 
 .navlink a:hover {
     transition: background-color 0.8s ease;
-    background-color: #66bdff;
+    background-color: #F4EAE6;
 }
 
 .mainForm {
-    height: 300px;
-    width: 350px;
+    height: 400px;
+    width: 750px;
     margin: 0 auto;
     padding-top: 350px;
     font-size: 1.2em;
@@ -61,10 +62,10 @@ nav:nth-child(1) {
 
 .mainForm label {
     display: inline-block;
-    width: 100px;
+    width: 200px;
     margin-right: 10px;
     text-align: right;
-    font-size: 1.2em;
+    font-size: 1.5em;
 }
 
 .formSubmit {
@@ -74,9 +75,9 @@ nav:nth-child(1) {
     margin: 0 auto;
     margin-top: 14px;
     font-size: 1.2em;
-    width: 100px;
-    background-color: #55acee;
-    border-radius: 2px;
+    width: 200px;
+    background-color: #4297A0;
+    border-radius: 4px;
     border-color: #66acee;
     padding: 3px 0px;
     color: white;
@@ -92,11 +93,180 @@ nav:nth-child(1) {
     background-color: #338acc;
 }
 
-#user, #pass, #pass2 {
+.searchSubmit {
+    transition: background-color 0.4s ease;
     text-align: center;
+    margin-top: 14px;
+    font-size: 1.0em;
+    width: 200px;
+    background-color: #4297A0;
+    border-radius: 4px;
+    border-color: #66acee;
+    padding: 3px 0px;
+    color: white;
+    text-decoration: none;
+}
+
+.searchSubmit:link, .searchSubmit:visited, .searchSubmit:hover, .searchSubmit:active {
+    color: white;
+}
+
+.searchSubmit:hover {
+    transition: background-color 0.4s ease;
+    background-color: #338acc;
+}
+
+.fileSearchSubmit {
+    transition: background-color 0.4s ease;
+    text-align: center;
+    margin-top: 14px;
+    font-size: 1.0em;
+    width: 200px;
+    background-color: #4297A0;
+    border-radius: 4px;
+    border-color: #66acee;
+    padding: 3px 0px;
+    color: white;
+    text-decoration: none;
+}
+
+.fileSearchSubmit:link, .fileSearchSubmit:visited, .fileSearchSubmit:hover, .fileSearchSubmit:active {
+    color: white;
+}
+
+.fileSearchSubmit:hover {
+    transition: background-color 0.4s ease;
+    background-color: #338acc;
+}
+
+
+.retrieveSubmit {
+    transition: background-color 0.4s ease;
+    text-align: center;
+    margin-top: 14px;
+    font-size: 1.0em;
+    width: 200px;
+    background-color: #4297A0;
+    border-radius: 4px;
+    border-color: #66acee;
+    padding: 3px 0px;
+    color: white;
+    text-decoration: none;
+}
+
+.retrieveSubmit:link, .retrieveSubmit:visited, .retrieveSubmit:hover, .retrieveSubmit:active {
+    color: white;
+}
+
+.retrieveSubmit:hover {
+    transition: background-color 0.4s ease;
+    background-color: #338acc;
+}
+
+.formSubmitRetrieve {
+    transition: background-color 0.4s ease;
+    display: inline-block;
+    text-align: center;
+    margin: 0 auto;
+    font-size: 1.2em;
+    width: 140px;
+    background-color: #4297A0;
+    border-radius: 4px;
+    border-color: #66acee;
+    padding: 3px 0px;
+    color: white;
+    text-decoration: none;
+}
+
+.formSubmitRetrieve:hover {
+    transition: background-color 0.4s ease;
+    background-color: #338acc;
+}
+#user, #pass, #pass2 {
+    text-align: left;
     font-size: 1.1em;
-    width: 180px;
+    width: 480px;
     border-radius: 6px;
+    height: 35px;
+}
+
+.uploadForm {
+    height: 120px;
+    width: 100%;
+    margin: 0 auto;
+    padding-top: 10px;
+    font-size: 1.2em;
+}
+
+.uploadForm label {
+    display: inline-block;
+    width: 200px;
+    margin-right: 20px;
+    text-align: right;
+    font-size: 1.2em;
+}
+.retrieveForm {
+    height: 60px;
+    width: 100%;
+    margin: 0 auto;
+    padding-top: 10px;
+    font-size: 1.2em;
+}
+
+.retrieveForm label {
+    display: inline-block;
+    width: 200px;
+    margin-right: 20px;
+    text-align: right;
+    font-size: 1.0em;
+}
+
+.searchForm, .fileSearchForm, #retrieveForm {
+    height: 60px;
+    width: 100%;
+    margin: 0 auto;
+    padding-top: 10px;
+    font-size: 1.2em;
+}
+
+.searchForm label {
+    display: inline-block;
+    width: 200px;
+    margin-right: 20px;
+    text-align: right;
+    font-size: 0.95em;
+}
+
+.fileSearchForm label {
+    display: inline-block;
+    width: 200px;
+    margin-right: 20px;
+    text-align: right;
+    font-size: 0.95em;
+}
+
+#retrieveForm label {
+    display: inline-block;
+    width: 200px;
+    margin-right: 20px;
+    text-align: right;
+    font-size: 0.95em;
+}
+
+#userName, #fileInfo, #fileName{
+    text-align: left;
+    font-size: 1.1em;
+    width: 480px;
+    border-radius: 6px;
+    height: 35px;
+}
+
+#searchName, #fileSearchName, #retrieveFile{
+    text-align: left;
+    font-size: 1.0em;
+    width: 480px;
+    border-radius: 6px;
+    height: 30px;
 }
 
 #user:focus, #pass:focus, #pass2:focus {
@@ -147,12 +317,11 @@ nav:nth-child(1) {
 }
 
 #files {
-    width: 40%;
-    min-width: 400px;
+    width: 80%;
+    min-width: 200px;
     border: 2px solid #55acee;
     border-radius: 4px;
-    margin: 0 auto;
-    margin-top: 100px;
+    margin-top: 10px;
 }
 
 .file {
@@ -162,9 +331,9 @@ nav:nth-child(1) {
     margin-bottom: 2px;
     border: 2px solid #55acee;
     border-radius: 4px;
-    background-color: #55acee;
+    background-color: #4297A0;
     padding: 10px;
-    min-height:60px;
+    min-height:30px;
     overflow: hidden;
 }
 
@@ -172,7 +341,9 @@ nav:nth-child(1) {
     transition: border-color 0.2s ease-out;
     border-color: rgba(255,255,255, 0.8);
     transition: background-color 2.6s ease-out;
-    background-color: #66bfff;
+    transition: color 1.6s ease-out;
+    background-color: #2F5061;
+    color: white;
 }
 
 img.robotFace {
@@ -199,4 +370,45 @@ h3.emptyFile {
 
 .file:last-child {
     margin-bottom:10px;
+}
+
+h3.fileName {
+    float:left;
+    width: 300px;
+    font-weight: bold;
+    padding-left: 65px;
+    font-size: 1.3em;
+}
+h3.fileSize {
+    float:right;
+    text-align: left;
+    width: 200px;
+    font-weight: bold;
+    padding-right: 40px;
+    font-size: 1.3em;
+}
+
+.downloadButton {
+    transition: background-color 0.4s ease;
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 14px;
+    font-size: 1.2em;
+    width: 200px;
+    background-color: #4297A0;
+    border-radius: 4px;
+    border-color: #66acee;
+    padding: 3px 0px;
+    color: white;
+    text-decoration: none;
+}
+
+.downloadButton:link, .downloadButton:visited, .downloadButton:hover, .downloadButton:active {
+    color: white;
+}
+
+.downloadButton:hover {
+    transition: background-color 0.4s ease;
+    background-color: #338acc;
 }
