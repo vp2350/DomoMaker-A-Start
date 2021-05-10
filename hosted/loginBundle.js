@@ -146,6 +146,7 @@ var getToken = function getToken() {
 };
 
 $(document).ready(function () {
+  console.log("HELLO LOGIN");
   getToken();
 });
 "use strict";

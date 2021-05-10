@@ -111,5 +111,6 @@ const getToken = () => {
 };
 
 $(document).ready(function() {
+    console.log("HELLO LOGIN");
     getToken();
 });

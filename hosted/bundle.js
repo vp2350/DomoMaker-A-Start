@@ -6,39 +6,14 @@ var handleDomo = function handleDomo(e) {
     width: 'hide'
   }, 350);
 
-  if ($("#domoName").val() == '' || $("#domoAge").val() == '' || $("#domoHeight").val() == '' || $("#domoFile").val() == '') {
+  if ($("#domoName").val() == '' || $("#domoAge").val() == '') {
     handleError("All fields are required!");
     return false;
   }
 
-  var inputForm = {};
-  inputForm["name"] = $("#domoName").val();
-  inputForm["age"] = $("#domoAge").val();
-  inputForm["height"] = $("#domoHeight").val();
-  inputForm["_csrf"] = $("#csrfDomo").val();
-  inputForm["file"] = $("#domoFile").files;
-  console.log($("#domoForm").serialize());
-  console.log($("#csrfDomo").val());
-  console.log(inputForm["file"]); //var inputString = 
-
-  sendAjax('POST', $("#domoForm").attr("action"), inputForm, function () {
+  sendAjax('POST', $("#domoForm").attr("action"), $("#domoForm").serialize(), function () {
     loadDomosFromServer();
   });
-  return false;
-};
-
-var handleDomoSearch = function handleDomoSearch(e) {
-  e.preventDefault();
-  $("#domoMessage").animate({
-    width: 'hide'
-  }, 350);
-
-  if ($("#domoNameSearch").val() == '') {
-    handleError("All fields are required!");
-    return false;
-  }
-
-  loadDomosByName();
   return false;
 };
 
@@ -92,30 +67,126 @@ var DomoForm = function DomoForm(props) {
   );
 };
 
-var DomoSearchForm = function DomoSearchForm(props) {
+var FileForm = function FileForm(props) {
   return (/*#__PURE__*/React.createElement("form", {
-      id: "domoSearchForm",
-      onSubmit: handleDomoSearch,
-      name: "domoSearchForm",
-      action: "/makerSearch",
-      method: "GET",
-      className: "domoSearchForm"
+      id: "uploadForm",
+      action: "/upload",
+      method: "post",
+      encType: "multipart/form-data"
     }, /*#__PURE__*/React.createElement("label", {
       htmlFor: "userName"
-    }, "Username to search: "), /*#__PURE__*/React.createElement("input", {
+    }, "Uploader Name: "), /*#__PURE__*/React.createElement("input", {
       id: "userName",
       type: "text",
       name: "userName",
-      placeholder: "User Name"
+      placeholder: "Domo Name"
+    }), /*#__PURE__*/React.createElement("label", {
+      htmlFor: "fileInfo"
+    }, "File Description: "), /*#__PURE__*/React.createElement("input", {
+      id: "fileInfo",
+      type: "text",
+      name: "fileInfo",
+      placeholder: "Domo Name"
     }), /*#__PURE__*/React.createElement("input", {
+      type: "file",
+      name: "sampleFile"
+    }), /*#__PURE__*/React.createElement("input", {
+      id: "csrfDomo",
       type: "hidden",
       name: "_csrf",
       value: props.csrf
     }), /*#__PURE__*/React.createElement("input", {
-      className: "searchDomoSubmit",
       type: "submit",
-      value: "Search Domo"
+      value: "Upload!"
     }))
+  );
+};
+
+var DownloadForm = function DownloadForm(props) {
+  return (/*#__PURE__*/React.createElement("form", {
+      id: "retrieveForm",
+      action: "/retrieve",
+      method: "get"
+    }, /*#__PURE__*/React.createElement("label", {
+      htmlFor: "fileName"
+    }, "Retrieve File By Name: "), /*#__PURE__*/React.createElement("input", {
+      name: "fileName",
+      type: "text"
+    }), /*#__PURE__*/React.createElement("input", {
+      id: "csrfDomo",
+      type: "hidden",
+      name: "_csrf",
+      value: props.csrf
+    }), /*#__PURE__*/React.createElement("input", {
+      type: "submit",
+      value: "Download!"
+    }))
+  );
+};
+
+var FileInfo = function FileInfo(props) {
+  if (props.info.length === 0) {
+    return (/*#__PURE__*/React.createElement("div", {
+        className: "fileInfo"
+      }, /*#__PURE__*/React.createElement("h3", null, "No Information on this File"))
+    );
+  }
+
+  return (/*#__PURE__*/React.createElement("div", {
+      className: "fileInfo"
+    }, /*#__PURE__*/React.createElement("h2", null, props.uploaderName), /*#__PURE__*/React.createElement("h2", null, props.fileName), /*#__PURE__*/React.createElement("h3", null, props.info))
+  );
+};
+
+var FileList = function FileList(props) {
+  if (props.files.length === 0) {
+    return (/*#__PURE__*/React.createElement("div", {
+        className: "fileList"
+      }, /*#__PURE__*/React.createElement("h1", null, "MY FILES"), /*#__PURE__*/React.createElement("h3", {
+        className: "emptyFile"
+      }, "No Files yet"))
+    );
+  }
+
+  var displayInfo = function displayInfo(info, uploaderName, fileName) {
+    ReactDOM.render( /*#__PURE__*/React.createElement(FileInfo, {
+      info: info,
+      uploaderName: uploaderName,
+      fileName: fileName
+    }), document.querySelector("#fileDescription"));
+  };
+
+  var downloadFile = function downloadFile(fileName) {
+    sendAjax('GET', '/retrieve', "fileName=" + fileName, function (data) {
+      console.log(doc.data);
+    });
+  };
+
+  var fileNodes = props.files.map(function (file) {
+    return (/*#__PURE__*/React.createElement("div", {
+        key: file._id,
+        className: "domo",
+        onClick: function onClick() {
+          return displayInfo(file.fileInformation, file.uploaderName, file.name);
+        }
+      }, /*#__PURE__*/React.createElement("h3", {
+        className: "fileName"
+      }, "Name: ", file.name, " "), /*#__PURE__*/React.createElement("h3", {
+        className: "fileSize"
+      }, "Size: ", file.size, " "), /*#__PURE__*/React.createElement("h3", {
+        className: "fileUploader"
+      }, "Uploader: ", file.uploaderName, " "), /*#__PURE__*/React.createElement("h3", {
+        className: "fileType"
+      }, "Type: ", file.mimetype, " "), /*#__PURE__*/React.createElement("button", {
+        onClick: function onClick() {
+          return downloadFile(file.name);
+        }
+      }, "Download"))
+    );
+  });
+  return (/*#__PURE__*/React.createElement("div", {
+      className: "fileList"
+    }, /*#__PURE__*/React.createElement("h1", null, "MY FILES"), fileNodes)
   );
 };
 
@@ -155,17 +226,16 @@ var DomoList = function DomoList(props) {
 };
 
 var loadDomosFromServer = function loadDomosFromServer() {
-  sendAjax('GET', '/getDomos', null, function (data) {
-    ReactDOM.render( /*#__PURE__*/React.createElement(DomoList, {
-      domos: data.domos
-    }), document.querySelector("#domos"));
+  sendAjax('GET', '/getDomos', null, function (data) {//ReactDOM.render(
+    //    <DomoList domos={data.domos} />, document.querySelector("#domos")
+    //);
   });
 };
 
-var loadDomosByName = function loadDomosByName() {
-  sendAjax('POST', '/getDomosByName', $("#domoSearchForm").serialize(), function (data) {
-    ReactDOM.render( /*#__PURE__*/React.createElement(DomoList, {
-      domos: data.domos
+var loadFilesFromServer = function loadFilesFromServer() {
+  sendAjax('GET', '/getOwnerFiles', null, function (data) {
+    ReactDOM.render( /*#__PURE__*/React.createElement(FileList, {
+      files: data.files
     }), document.querySelector("#domos"));
   });
 };
@@ -174,12 +244,16 @@ var setup = function setup(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(DomoForm, {
     csrf: csrf
   }), document.querySelector("#makeDomo"));
-  ReactDOM.render( /*#__PURE__*/React.createElement(DomoSearchForm, {
+  ReactDOM.render( /*#__PURE__*/React.createElement(FileForm, {
     csrf: csrf
-  }), document.querySelector("#searchDomo"));
-  ReactDOM.render( /*#__PURE__*/React.createElement(DomoList, {
-    domos: []
+  }), document.querySelector("#uploadFile"));
+  ReactDOM.render( /*#__PURE__*/React.createElement(DownloadForm, {
+    csrf: csrf
+  }), document.querySelector("#downloadFile"));
+  ReactDOM.render( /*#__PURE__*/React.createElement(FileList, {
+    files: []
   }), document.querySelector("#domos"));
+  loadFilesFromServer();
   loadDomosFromServer();
 };
 
@@ -190,6 +264,7 @@ var getToken = function getToken() {
 };
 
 $(document).ready(function () {
+  console.log("HELLO MAKER");
   getToken();
 });
 "use strict";

@@ -3,45 +3,17 @@ const handleDomo = (e) => {
     
     $("#domoMessage").animate({width: 'hide'}, 350);
     
-    if($("#domoName").val() == '' || $("#domoAge").val() == '' || $("#domoHeight").val() == '' || $("#domoFile").val() == '') {
+    if($("#domoName").val() == '' || $("#domoAge").val() == '') {
         handleError("All fields are required!");
         return false;
     }
     
-    var inputForm = {};
-    inputForm["name"] = $("#domoName").val();
-    inputForm["age"] = $("#domoAge").val();
-    inputForm["height"] = $("#domoHeight").val();
-    inputForm["_csrf"] = $("#csrfDomo").val();
-    inputForm["file"] = $("#domoFile").files;
-    console.log($("#domoForm").serialize());
-    console.log($("#csrfDomo").val());
-    console.log(inputForm["file"]);
-    //var inputString = 
-    
-    sendAjax('POST', $("#domoForm").attr("action"), inputForm, function() {
+    sendAjax('POST', $("#domoForm").attr("action"), $("#domoForm").serialize(), function() {
         loadDomosFromServer();
     });
     
     return false;
 };
-
-const handleDomoSearch = (e) => {
-    e.preventDefault();
-    
-    $("#domoMessage").animate({width: 'hide'}, 350);
-    
-    if($("#domoNameSearch").val() == '') {
-        handleError("All fields are required!");
-        return false;
-    }
-    
-    loadDomosByName();
-
-    
-    return false;
-};
-
 
 const DomoForm = (props) => {
     return (
@@ -67,20 +39,93 @@ const DomoForm = (props) => {
     );
 };
 
-const DomoSearchForm = (props) => {
-    return (
-    <form id="domoSearchForm"
-        onSubmit={handleDomoSearch}
-        name="domoSearchForm"
-        action="/makerSearch"
-        method="GET"
-        className="domoSearchForm"
+const FileForm = (props) =>{
+    return(
+    <form 
+        id='uploadForm'
+        action='/upload'
+        method='post'
+        encType="multipart/form-data"
     >
-        <label htmlFor="userName">Username to search: </label>
-        <input id="userName" type="text" name="userName" placeholder="User Name" />
-        <input type="hidden" name="_csrf" value={props.csrf} />
-        <input className="searchDomoSubmit" type="submit" value="Search Domo" />
+        <label htmlFor="userName">Uploader Name: </label>
+        <input id="userName" type="text" name="userName" placeholder="Domo Name" />
+        <label htmlFor="fileInfo">File Description: </label>
+        <input id="fileInfo" type="text" name="fileInfo" placeholder="Domo Name" />
+        <input type="file" name="sampleFile" />
+        <input id="csrfDomo" type="hidden" name="_csrf" value={props.csrf} />
+        <input type="submit" value='Upload!' />    
     </form>
+        );
+};
+
+const DownloadForm = (props) => {
+    return (<form 
+        id='retrieveForm'
+        action='/retrieve'
+        method='get'>
+        <label htmlFor='fileName'>Retrieve File By Name: </label>
+        <input name='fileName' type='text' />
+        <input id="csrfDomo" type="hidden" name="_csrf" value={props.csrf} />
+        <input type='submit' value='Download!' />        
+    </form>);
+};
+
+const FileInfo = function(props){
+    if(props.info.length === 0){
+        return (
+            <div className = "fileInfo">
+                <h3>No Information on this File</h3>
+            </div>
+        );
+    }
+    
+    return (
+        <div className = "fileInfo">
+            <h2>{props.uploaderName}</h2>
+            <h2>{props.fileName}</h2>
+            <h3>{props.info}</h3>
+        </div>
+    );
+};
+
+const FileList = function(props) {
+    if(props.files.length === 0) {
+        return (
+            <div className="fileList">
+                   <h1>MY FILES</h1>
+                   <h3 className="emptyFile">No Files yet</h3>
+            </div>
+        );
+    }
+    
+    const displayInfo = (info, uploaderName, fileName) => {
+        ReactDOM.render(
+            <FileInfo info={info} uploaderName = {uploaderName} fileName = {fileName}/>, document.querySelector("#fileDescription")
+        );
+    };
+    
+    const downloadFile = (fileName) => {
+        sendAjax('GET', '/retrieve', "fileName="+fileName, (data) => {
+            console.log(doc.data);
+        });
+    };
+    const fileNodes = props.files.map(function(file) {
+        return (
+            <div key={file._id} className="domo" onClick = {() => displayInfo(file.fileInformation, file.uploaderName, file.name)}>
+                <h3 className="fileName">Name: {file.name} </h3>
+                <h3 className="fileSize">Size: {file.size} </h3>  
+                <h3 className="fileUploader">Uploader: {file.uploaderName} </h3>
+                <h3 className="fileType">Type: {file.mimetype} </h3> 
+                <button onClick = {() => downloadFile(file.name)}>Download</button>
+            </div>
+        );
+    });
+    
+    return (
+        <div className="fileList">
+           <h1>MY FILES</h1>
+            {fileNodes}
+        </div>
     );
 };
 
@@ -115,17 +160,16 @@ const DomoList = function(props) {
 
 const loadDomosFromServer = () => {
     sendAjax('GET', '/getDomos', null, (data) => {
-        ReactDOM.render(
-            <DomoList domos={data.domos} />, document.querySelector("#domos")
-        );
+        //ReactDOM.render(
+        //    <DomoList domos={data.domos} />, document.querySelector("#domos")
+        //);
     });
 };
 
-
-const loadDomosByName = () => {
-    sendAjax('POST', '/getDomosByName', $("#domoSearchForm").serialize(), (data) => {
+const loadFilesFromServer = () => {
+    sendAjax('GET', '/getOwnerFiles', null, (data) => {
         ReactDOM.render(
-            <DomoList domos={data.domos} />, document.querySelector("#domos")
+            <FileList files={data.files} />, document.querySelector("#domos")
         );
     });
 };
@@ -136,12 +180,16 @@ const setup = function(csrf) {
             <DomoForm csrf={csrf} />, document.querySelector("#makeDomo")
     );
     ReactDOM.render(
-            <DomoSearchForm csrf={csrf} />, document.querySelector("#searchDomo")
+            <FileForm csrf={csrf} />, document.querySelector("#uploadFile")
     );
     ReactDOM.render(
-            <DomoList domos={[]} />, document.querySelector("#domos")
+            <DownloadForm csrf={csrf} />, document.querySelector("#downloadFile")
+    );
+    ReactDOM.render(
+            <FileList files={[]} />, document.querySelector("#domos")
     );
     
+    loadFilesFromServer();
     loadDomosFromServer();
     
 };
@@ -153,5 +201,6 @@ const getToken = () => {
 };
 
 $(document).ready(function() {
+    console.log("HELLO MAKER");
     getToken();
 });

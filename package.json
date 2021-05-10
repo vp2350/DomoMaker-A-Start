@@ -10,9 +10,13 @@
     "scripts": {
         "buildLoginBundle": "babel ./client/login ./client/helper --presets @babel/preset-react --out-file ./hosted/loginBundle.js",
         "buildAppBundle": "babel ./client/app ./client/helper --presets @babel/preset-react --out-file ./hosted/bundle.js",
+        "buildSearchBundle": "babel ./client/search ./client/helper --presets @babel/preset-react --out-file ./hosted/searchBundle.js",
+        "buildPasswordBundle": "babel ./client/password ./client/helper --presets @babel/preset-react --out-file ./hosted/passwordBundle.js",
         "build": "npm run buildLoginBundle && npm run buildAppBundle",
         "watchLoginBundle": "babel --watch ./client/login ./client/helper --presets @babel/preset-react --out-file ./hosted/loginBundle.js",
         "watchAppBundle": "babel --watch ./client/app ./client/helper --presets @babel/preset-react --out-file ./hosted/bundle.js",
+        "watchSearchBundle": "babel --watch ./client/search ./client/helper --presets @babel/preset-react --out-file ./hosted/searchBundle.js",
+        "watchPasswordBundle": "babel --watch ./client/password ./client/helper --presets @babel/preset-react --out-file ./hosted/passwordBundle.js",
         "nodemon": "nodemon --watch ./server ./server/app.js",
         "start": "node ./server/app.js",
         "pretest": "eslint ./server --fix",
