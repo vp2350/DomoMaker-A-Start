@@ -15,7 +15,7 @@ const fileUpload = require('express-fileupload');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/DomoMaker';
+const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/FileShare';
 
 const mongooseOptions = {
   useNewUrlParser: true,
@@ -52,7 +52,7 @@ const router = require('./router.js');
 const app = express();
 
 app.use('/assets', express.static(path.resolve(`${__dirname}/../hosted/`)));
-app.use(favicon(`${__dirname}/../hosted/img/favicon.png`));
+app.use(favicon(`${__dirname}/../hosted/img/robot.png`));
 app.disable('x-powered-by');
 app.use(compression());
 app.use(fileUpload());
@@ -80,10 +80,10 @@ app.set('views', `${__dirname}/../views`);
 
 app.use(csrf());
 app.use((err, req, res, next) => {
- if (err.code !== 'EBADCSRFTOKEN') return next(err);
+  if (err.code !== 'EBADCSRFTOKEN') return next(err);
 
- console.log('MISSING CSRF token');
- return false;
+  console.log('MISSING CSRF token');
+  return false;
 });
 
 router(app);

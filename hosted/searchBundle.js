@@ -2,8 +2,7 @@
 
 var handleFileSearch = function handleFileSearch(e) {
   e.preventDefault();
-  console.log("1234");
-  $("#domoMessage").animate({
+  $("#robotMessage").animate({
     width: 'hide'
   }, 350);
 
@@ -15,7 +14,27 @@ var handleFileSearch = function handleFileSearch(e) {
   sendAjax('GET', $("#searchForm").attr("action"), $("#searchForm").serialize(), function (data) {
     ReactDOM.render( /*#__PURE__*/React.createElement(FileList, {
       files: data.files
-    }), document.querySelector("#domos"));
+    }), document.querySelector("#files"));
+  });
+  return false;
+};
+
+var handleFileSearchByName = function handleFileSearchByName(e) {
+  e.preventDefault();
+  $("#robotMessage").animate({
+    width: 'hide'
+  }, 350);
+
+  if ($("#fileSearchName").val() == '') {
+    handleError("All fields are required!");
+    return false;
+  }
+
+  sendAjax('GET', $("#fileSearchForm").attr("action"), $("#fileSearchForm").serialize(), function (data) {
+    console.log(data);
+    ReactDOM.render( /*#__PURE__*/React.createElement(FileList, {
+      files: data.files
+    }), document.querySelector("#files"));
   });
   return false;
 };
@@ -31,18 +50,47 @@ var SearchForm = function SearchForm(props) {
       className: "searchForm"
     }, /*#__PURE__*/React.createElement("label", {
       htmlFor: "searchName"
-    }, "Name: "), /*#__PURE__*/React.createElement("input", {
+    }, "User Name To Search For: "), /*#__PURE__*/React.createElement("input", {
       id: "searchName",
       type: "text",
       name: "searchName",
-      placeholder: "Domo Name"
+      placeholder: "User Name"
     }), /*#__PURE__*/React.createElement("input", {
-      id: "csrfDomo",
+      id: "csrfFile",
       type: "hidden",
       name: "_csrf",
       value: props.csrf
     }), /*#__PURE__*/React.createElement("input", {
       className: "searchSubmit",
+      type: "submit",
+      value: "Search Files"
+    }))
+  );
+};
+
+var FileNameSearchForm = function FileNameSearchForm(props) {
+  return (/*#__PURE__*/React.createElement("form", {
+      id: "fileSearchForm",
+      onSubmit: handleFileSearchByName,
+      name: "fileSearchForm",
+      encType: "multipart/form-data",
+      action: "/getFilesByFilename",
+      method: "GET",
+      className: "fileSearchForm"
+    }, /*#__PURE__*/React.createElement("label", {
+      htmlFor: "fileSearchName"
+    }, "File Name To Search For: "), /*#__PURE__*/React.createElement("input", {
+      id: "fileSearchName",
+      type: "text",
+      name: "fileSearchName",
+      placeholder: "File Name"
+    }), /*#__PURE__*/React.createElement("input", {
+      id: "csrfFile",
+      type: "hidden",
+      name: "_csrf",
+      value: props.csrf
+    }), /*#__PURE__*/React.createElement("input", {
+      className: "fileSearchSubmit",
       type: "submit",
       value: "Search Files"
     }))
@@ -60,7 +108,7 @@ var DownloadForm = function DownloadForm(props) {
       name: "fileName",
       type: "text"
     }), /*#__PURE__*/React.createElement("input", {
-      id: "csrfDomo",
+      id: "csrfFile",
       type: "hidden",
       name: "_csrf",
       value: props.csrf
@@ -89,7 +137,7 @@ var FileList = function FileList(props) {
   if (props.files.length === 0) {
     return (/*#__PURE__*/React.createElement("div", {
         className: "fileList"
-      }, /*#__PURE__*/React.createElement("h1", null, "MY FILES"), /*#__PURE__*/React.createElement("h3", {
+      }, /*#__PURE__*/React.createElement("h1", null, "FILES RECEIVED: (Click on each for more info)"), /*#__PURE__*/React.createElement("h3", {
         className: "emptyFile"
       }, "No Files yet"))
     );
@@ -106,7 +154,7 @@ var FileList = function FileList(props) {
   var fileNodes = props.files.map(function (file) {
     return (/*#__PURE__*/React.createElement("div", {
         key: file._id,
-        className: "domo",
+        className: "file",
         onClick: function onClick() {
           return displayInfo(file.fileInformation, file.uploaderName, file.name);
         }
@@ -114,7 +162,7 @@ var FileList = function FileList(props) {
         className: "fileName"
       }, "Name: ", file.name, " "), /*#__PURE__*/React.createElement("h3", {
         className: "fileSize"
-      }, "Size: ", file.size, " "), /*#__PURE__*/React.createElement("h3", {
+      }, "Size: ", file.size, " bits "), /*#__PURE__*/React.createElement("h3", {
         className: "fileUploader"
       }, "Uploader: ", file.uploaderName, " "), /*#__PURE__*/React.createElement("h3", {
         className: "fileType"
@@ -130,10 +178,13 @@ var FileList = function FileList(props) {
 var setup = function setup(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(FileList, {
     files: []
-  }), document.querySelector("#domos"));
+  }), document.querySelector("#files"));
   ReactDOM.render( /*#__PURE__*/React.createElement(SearchForm, {
     csrf: csrf
   }), document.querySelector("#searchFile"));
+  ReactDOM.render( /*#__PURE__*/React.createElement(FileNameSearchForm, {
+    csrf: csrf
+  }), document.querySelector("#searchFileByName"));
   ReactDOM.render( /*#__PURE__*/React.createElement(DownloadForm, {
     csrf: csrf
   }), document.querySelector("#downloadFile"));
@@ -152,13 +203,13 @@ $(document).ready(function () {
 
 var handleError = function handleError(message) {
   $("#errorMessage").text(message);
-  $("#domoMessage").animate({
+  $("#robotMessage").animate({
     width: 'toggle'
   }, 350);
 };
 
 var redirect = function redirect(response) {
-  $("#domoMessage").animate({
+  $("#robotMessage").animate({
     width: 'hide'
   }, 350);
   window.location = response.redirect;

@@ -9,7 +9,7 @@ var SuccessMessage = function SuccessMessage(props) {
 
 var handlePassword = function handlePassword(e) {
   e.preventDefault();
-  $("#domoMessage").animate({
+  $("#robotMessage").animate({
     width: 'hide'
   }, 350);
 
@@ -88,13 +88,13 @@ $(document).ready(function () {
 
 var handleError = function handleError(message) {
   $("#errorMessage").text(message);
-  $("#domoMessage").animate({
+  $("#robotMessage").animate({
     width: 'toggle'
   }, 350);
 };
 
 var redirect = function redirect(response) {
-  $("#domoMessage").animate({
+  $("#robotMessage").animate({
     width: 'hide'
   }, 350);
   window.location = response.redirect;

@@ -4,13 +4,17 @@ const {
   Account,
 } = models;
 
+const makerPage = (req, res) => res.render('app', {
+  csrfToken: req.csrfToken(),
+});
+
 const loginPage = (req, res) => {
   res.render('login', { csrfToken: req.csrfToken() });
 };
 
 const passwordPage = (req, res) => {
   res.render('password', { csrfToken: req.csrfToken() });
-}; 
+};
 
 const logout = (req, res) => {
   req.session.destroy();
@@ -118,23 +122,21 @@ const password = (request, response) => {
       error: 'Passwords do not match!',
     });
   }
-  
-  
+
+
   return Account.AccountModel.generateHash(req.body.pass, (salt, hash) => {
     const accountData = {
       username: req.body.username,
       salt,
       password: hash,
     };
-    const query = {'username': req.body.username};
-    //https://stackoverflow.com/questions/7267102/how-do-i-update-upsert-a-document-in-mongoose
-    Account.AccountModel.findOneAndUpdate(query, accountData, {upsert: true}, function(err, doc){
-        if(err) return res.send(500, {error: err});
-        return res.status(200, {message: "SUCCESSFULLY CHANGED PASSWORD"});
+    const query = { username: req.body.username };
+    // https://stackoverflow.com/questions/7267102/how-do-i-update-upsert-a-document-in-mongoose
+    Account.AccountModel.findOneAndUpdate(query, accountData, { upsert: true }, (err) => {
+      if (err) return res.send(500, { error: err });
+      return res.status(200, { message: 'SUCCESSFULLY CHANGED PASSWORD' });
     });
-    
   });
-  
 };
 
 const getToken = (request, response) => {
@@ -148,6 +150,7 @@ const getToken = (request, response) => {
   res.json(csrfJSON);
 };
 
+module.exports.makerPage = makerPage;
 module.exports.loginPage = loginPage;
 module.exports.login = login;
 module.exports.signup = signup;

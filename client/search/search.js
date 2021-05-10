@@ -1,8 +1,7 @@
 const handleFileSearch = (e) => {
     e.preventDefault();
     
-    console.log("1234");
-    $("#domoMessage").animate({width: 'hide'}, 350);
+    $("#robotMessage").animate({width: 'hide'}, 350);
     
     if($("#searchName").val() == '') {
         handleError("All fields are required!");
@@ -10,7 +9,26 @@ const handleFileSearch = (e) => {
     }
     sendAjax('GET', $("#searchForm").attr("action"), $("#searchForm").serialize(), (data) => {
         ReactDOM.render(
-            <FileList files={data.files} />, document.querySelector("#domos")
+            <FileList files={data.files} />, document.querySelector("#files")
+        );
+    });
+    
+    return false;
+};
+
+const handleFileSearchByName = (e) => {
+    e.preventDefault();
+    
+    $("#robotMessage").animate({width: 'hide'}, 350);
+    
+    if($("#fileSearchName").val() == '') {
+        handleError("All fields are required!");
+        return false;
+    }
+    sendAjax('GET', $("#fileSearchForm").attr("action"), $("#fileSearchForm").serialize(), (data) => {
+        console.log(data);
+        ReactDOM.render(
+            <FileList files={data.files} />, document.querySelector("#files")
         );
     });
     
@@ -27,10 +45,28 @@ const SearchForm = (props) => {
         method="GET"
         className="searchForm"
     >
-        <label htmlFor="searchName">Name: </label>
-        <input id="searchName" type="text" name="searchName" placeholder="Domo Name" />
-        <input id="csrfDomo" type="hidden" name="_csrf" value={props.csrf} />
+        <label htmlFor="searchName">User Name To Search For: </label>
+        <input id="searchName" type="text" name="searchName" placeholder="User Name" />
+        <input id="csrfFile" type="hidden" name="_csrf" value={props.csrf} />
         <input className="searchSubmit" type="submit" value="Search Files" />
+    </form>
+    );
+};
+
+const FileNameSearchForm = (props) => {
+    return (
+    <form id="fileSearchForm"
+        onSubmit={handleFileSearchByName}
+        name="fileSearchForm"
+        encType="multipart/form-data"
+        action="/getFilesByFilename"
+        method="GET"
+        className="fileSearchForm"
+    >
+        <label htmlFor="fileSearchName">File Name To Search For: </label>
+        <input id="fileSearchName" type="text" name="fileSearchName" placeholder="File Name" />
+        <input id="csrfFile" type="hidden" name="_csrf" value={props.csrf} />
+        <input className="fileSearchSubmit" type="submit" value="Search Files" />
     </form>
     );
 };
@@ -42,7 +78,7 @@ const DownloadForm = (props) => {
         method='get'>
         <label htmlFor='fileName'>Retrieve File By Name: </label>
         <input name='fileName' type='text' />
-        <input id="csrfDomo" type="hidden" name="_csrf" value={props.csrf} />
+        <input id="csrfFile" type="hidden" name="_csrf" value={props.csrf} />
         <input type='submit' value='Download!' />        
     </form>);
 };
@@ -69,7 +105,7 @@ const FileList = function(props) {
     if(props.files.length === 0) {
         return (
             <div className="fileList">
-                   <h1>MY FILES</h1>
+                   <h1>FILES RECEIVED: (Click on each for more info)</h1>
                    <h3 className="emptyFile">No Files yet</h3>
             </div>
         );
@@ -82,9 +118,9 @@ const FileList = function(props) {
     };
     const fileNodes = props.files.map(function(file) {
         return (
-            <div key={file._id} className="domo" onClick = {() => displayInfo(file.fileInformation, file.uploaderName, file.name)}>
+            <div key={file._id} className="file" onClick = {() => displayInfo(file.fileInformation, file.uploaderName, file.name)}>
                 <h3 className="fileName">Name: {file.name} </h3>
-                <h3 className="fileSize">Size: {file.size} </h3>  
+                <h3 className="fileSize">Size: {file.size} bits </h3>  
                 <h3 className="fileUploader">Uploader: {file.uploaderName} </h3>
                 <h3 className="fileType">Type: {file.mimetype} </h3> 
             </div>
@@ -101,10 +137,13 @@ const FileList = function(props) {
 
 const setup = function(csrf) {
     ReactDOM.render(
-            <FileList files={[]} />, document.querySelector("#domos")
+            <FileList files={[]} />, document.querySelector("#files")
     );
     ReactDOM.render(
             <SearchForm csrf={csrf} />, document.querySelector("#searchFile")
+    );
+    ReactDOM.render(
+            <FileNameSearchForm csrf={csrf} />, document.querySelector("#searchFileByName")
     );
     ReactDOM.render(
             <DownloadForm csrf={csrf} />, document.querySelector("#downloadFile")

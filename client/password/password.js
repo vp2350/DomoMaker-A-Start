@@ -7,7 +7,7 @@ const SuccessMessage = (props) => {
 const handlePassword = (e) => {
     e.preventDefault();
     
-    $("#domoMessage").animate({width: 'hide'}, 350);
+    $("#robotMessage").animate({width: 'hide'}, 350);
     
     if($("#pass").val() == '' || $("#pass2").val() == ''){
         handleError("All fields are required!");
